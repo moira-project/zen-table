@@ -13,7 +13,7 @@ module.exports = {
         'docs', // 문서 추가/수정/삭제
         'build', // 빌드 시스템 수정 (npm, yarn 등)
         'test', // 테스트 추가/수정/삭제
-        'perf', // 이전 커밋을 되돌림
+        'perf', // 성능 개선
         'chore', // 이외 기타 작업
       ],
     ],
