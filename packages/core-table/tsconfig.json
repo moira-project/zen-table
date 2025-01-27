@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json", // 루트 tsconfig를 상속
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "outDir": "dist", // 빌드 결과 폴더
+    "declaration": true, // 타입 정의 파일 생성
+    "declarationDir": "dist", // 타입 정의 파일 위치
+    "module": "ESNext",
+    "target": "ES2019",
+    "strict": true,
+    "esModuleInterop": true
+  }
+}
