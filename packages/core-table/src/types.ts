@@ -21,3 +21,11 @@ export interface ColumnDef<TData extends RowDef, TValue = unknown>
   extends ColumnKeyDef<TData>,
     ColumnHeaderDef,
     ColumnStyleDef {}
+
+export interface ColumnHeader {
+  header: string;
+}
+
+export interface ColumnStyle {
+  width?: number;
+}
