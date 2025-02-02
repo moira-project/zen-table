@@ -2,4 +2,4 @@ export default {
   title: 'Vanilla/Basic',
 };
 
-export { Primary } from '@zen-table/core-table';
+export { Table } from '@zen-table/core-table';

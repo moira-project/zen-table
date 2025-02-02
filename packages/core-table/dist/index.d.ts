@@ -1,2 +1,2 @@
 export { Primary } from './button';
-export { Table } from './Table';
+export * from './components';
