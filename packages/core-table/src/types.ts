@@ -21,3 +21,19 @@ export interface ColumnDef<TData extends RowDef, TValue = unknown>
   extends ColumnKeyDef<TData>,
     ColumnHeaderDef,
     ColumnStyleDef {}
+
+export interface RowModel<TData extends RowDef> {
+  rows: any[];
+}
+export interface HeaderModel<TData extends RowDef> {
+  headers: any[];
+}
+
+export type RowId = string | number;
+export type GetRowId<TData extends RowDef> = (
+  row: TData,
+  index: number
+) => string | number;
+export interface TableOptions<TData extends RowDef> extends TableDef<TData> {
+  getRowId?: GetRowId<TData>;
+}
