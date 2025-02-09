@@ -5,5 +5,12 @@ const Primary = () => {
     return button;
 };
 
-export { Primary };
+const Table = () => {
+    const button = document.createElement('button');
+    button.innerText = 'Table!!!!!~!~';
+    button.onclick = () => alert('Button clicked!');
+    return button;
+};
+
+export { Primary, Table };
 //# sourceMappingURL=index.esm.js.map
