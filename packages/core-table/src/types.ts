@@ -36,4 +36,9 @@ export type GetRowId<TData extends RowDef> = (
 ) => string | number;
 export interface TableOptions<TData extends RowDef> extends TableDef<TData> {
   getRowId?: GetRowId<TData>;
+  enableSorting?: boolean;
+}
+
+export interface TableFeature<TData extends RowDef> {
+  process(data: TData[]): TData[];
 }

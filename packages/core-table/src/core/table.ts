@@ -1,9 +1,9 @@
+import { SortingManager } from '@core-table/features/SortingManager';
 import {
-  GetRowId,
   HeaderModel,
   RowDef,
   RowModel,
-  TableDef,
+  TableFeature,
   TableOptions,
 } from '@core-table/types';
 
@@ -12,21 +12,40 @@ interface TableModel<TData extends RowDef> {
   getHeaderModel: () => HeaderModel<TData>;
   getRowModel?: () => RowModel<TData>;
   // getFooterModel:
-  _getRowId: GetRowId<TData>;
 }
 
-export class TableCore<TData> implements TableModel<TData> {
+export class CoreTable<TData> implements TableModel<TData> {
   options: TableOptions<TData>;
+  private readonly _managerMap: Record<string, () => TableFeature<TData>>;
+  private _features: TableFeature<TData>[] = [];
   constructor(options: TableOptions<TData>) {
     this.options = options;
+    this._managerMap = {
+      enableSorting: () => new SortingManager<TData>(),
+    };
+    this._initializeManagers();
   }
-
+  private _initializeManagers() {
+    Object.entries(this._managerMap).forEach(([optionKey, createManager]) => {
+      if (this.options[optionKey as keyof TableOptions<TData>]) {
+        this._addManager(createManager);
+      }
+    });
+  }
+  private _addManager(createManager: () => TableFeature<TData>) {
+    const manager = createManager();
+    if (manager) this._features.push(manager);
+  }
   getRowModel() {
+    let data = this.options.data;
+    for (const feature of this._features) {
+      data = feature.process(data);
+    }
     return {
-      rows: this.options.data.map((row, index) => ({
+      rows: data.map((row, index) => ({
         id: this._getRowId(row, index),
         index,
-        original: row,
+        rowData: row,
         getCells: () =>
           this.options.columns.map(column => ({
             column,
@@ -35,7 +54,7 @@ export class TableCore<TData> implements TableModel<TData> {
       })),
     };
   }
-  _getRowId(row: TData, index: number) {
+  private _getRowId(row: TData, index: number) {
     return this.options.getRowId?.(row, index) ?? index;
   }
   getHeaderModel() {

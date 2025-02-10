@@ -1,4 +1,4 @@
-import { TableCore } from '@core-table/core/Table';
+import { CoreTable } from '@core-table/core/table';
 import { ColumnDef } from '@core-table/types';
 
 type Person = {
@@ -21,7 +21,7 @@ export const Table = () => {
   ];
 
   // Initialize TableCore instance
-  const table = new TableCore<Person>({
+  const table = new CoreTable<Person>({
     columns,
     data,
     getRowId: row => `person-${row.id}`,
