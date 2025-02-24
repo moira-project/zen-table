@@ -1,7 +1,4 @@
-import {
-  SortingManager,
-  SortingStrategy,
-} from '@core-table/features/SortingManager';
+import { SortingManager } from '@core-table/features/SortingManager';
 import { HeaderModel, RowDef, RowModel, TableFeature } from '@core-table/types';
 
 interface TableModel<TData extends RowDef> {
@@ -15,24 +12,25 @@ interface TableOptions<TData extends RowDef> {
   data: TData[];
   columns: { key: string }[];
   enableSorting?: boolean;
-  sortingStrategy?: SortingStrategy<TData>; // 사용자 정의 정렬 전략
+  sortingFns?: Record<
+    string,
+    (rowA: TData, rowB: TData, columnKey: string) => number
+  >;
   getRowId?: (row: TData, index: number) => string | number;
+
   // 그 외 옵션들...
 }
 
 // 2. CoreTable 클래스에서 _managerMap을 수정
 export class CoreTable<TData> implements TableModel<TData> {
   options: TableOptions<TData>;
-
   private _features: TableFeature<TData>[] = [];
   private readonly _managerMap: Record<string, () => TableFeature<TData>>;
 
   constructor(options: TableOptions<TData>) {
     this.options = options;
     this._managerMap = {
-      // enableSorting 옵션이 true이면, options.sortingStrategy가 있다면 해당 전략을 주입
-      enableSorting: () =>
-        new SortingManager<TData>(this.options.sortingStrategy),
+      enableSorting: () => new SortingManager<TData>(this.options.sortingFns),
     };
     this._initializeManagers();
   }
