@@ -1,3 +1,5 @@
+import { SortingColumnDef } from './features/SortingManager';
+
 export type RowDef = unknown | object | any[];
 
 export interface TableDef<TData extends RowDef> {
@@ -17,9 +19,13 @@ export interface ColumnStyleDef {
   width?: number;
 }
 
+export interface ColumnFeatureDef<TData extends RowDef, TValue = unknown>
+  extends SortingColumnDef<TData> {}
+
 export interface ColumnDef<TData extends RowDef, TValue = unknown>
   extends ColumnKeyDef<TData>,
     ColumnHeaderDef,
+    ColumnFeatureDef<TData>,
     ColumnStyleDef {}
 
 export interface RowModel<TData extends RowDef> {
@@ -40,5 +46,5 @@ export interface TableOptions<TData extends RowDef> extends TableDef<TData> {
 }
 
 export interface TableFeature<TData extends RowDef> {
-  process(data: TData[]): TData[];
+  process(data: TData[], columns: ColumnDef<TData>[]): TData[];
 }

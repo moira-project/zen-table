@@ -1,5 +1,11 @@
 import { SortingManager } from '@core-table/features/SortingManager';
-import { HeaderModel, RowDef, RowModel, TableFeature } from '@core-table/types';
+import {
+  ColumnDef,
+  HeaderModel,
+  RowDef,
+  RowModel,
+  TableFeature,
+} from '@core-table/types';
 
 interface TableModel<TData extends RowDef> {
   options: TableOptions<TData>;
@@ -7,21 +13,18 @@ interface TableModel<TData extends RowDef> {
   getRowModel?: () => RowModel<TData>;
   // getFooterModel:
 }
-// 1. TableOptions 인터페이스에 sortingStrategy 옵션 추가
+
 interface TableOptions<TData extends RowDef> {
   data: TData[];
-  columns: { key: string }[];
+  columns: ColumnDef<TData>[];
   enableSorting?: boolean;
   sortingFns?: Record<
     string,
     (rowA: TData, rowB: TData, columnKey: string) => number
   >;
   getRowId?: (row: TData, index: number) => string | number;
-
-  // 그 외 옵션들...
 }
 
-// 2. CoreTable 클래스에서 _managerMap을 수정
 export class CoreTable<TData> implements TableModel<TData> {
   options: TableOptions<TData>;
   private _features: TableFeature<TData>[] = [];
@@ -47,8 +50,6 @@ export class CoreTable<TData> implements TableModel<TData> {
     const manager = createManager();
     if (manager) this._features.push(manager);
   }
-
-  // 특정 매니저 인스턴스를 가져오기 위한 헬퍼 메서드
   getFeatureManager<T extends TableFeature<TData>>(
     ManagerClass: new (...args: any[]) => T
   ): T | undefined {
@@ -59,9 +60,9 @@ export class CoreTable<TData> implements TableModel<TData> {
 
   getRowModel() {
     let data = this.options.data;
-    // 각 기능(정렬, 필터링 등)을 순차적으로 데이터에 적용
+    const columns = this.options.columns;
     for (const feature of this._features) {
-      data = feature.process(data);
+      data = feature.process(data, columns);
     }
     return {
       rows: data.map((row, index) => ({
