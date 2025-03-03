@@ -1,6 +1,6 @@
 import { CoreTable } from '@core-table/core/table';
 import { ColumnDef } from '@core-table/types';
-import { SortingManager } from '@core-table/features/SortingManager';
+import { SortingManager } from '@core-table/features/Sorting/SortingManager';
 
 type Person = {
   id: number;
@@ -65,7 +65,7 @@ export const SortingTable = () => {
       const sortingManager =
         table.getFeatureManager<SortingManager<Person>>(SortingManager);
       console.log(sortingManager, currentSortKey, currentSortDirection);
-      sortingManager?.setSorting({
+      sortingManager?.setState({
         columnKey: currentSortKey,
         direction: currentSortDirection,
       });

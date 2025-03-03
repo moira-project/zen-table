@@ -1,4 +1,7 @@
-import { SortingManager } from '@core-table/features/SortingManager';
+import {
+  SortingFn,
+  SortingManager,
+} from '@core-table/features/Sorting/SortingManager';
 import {
   ColumnDef,
   HeaderModel,
@@ -18,10 +21,7 @@ interface TableOptions<TData extends RowDef> {
   data: TData[];
   columns: ColumnDef<TData>[];
   enableSorting?: boolean;
-  sortingFns?: Record<
-    string,
-    (rowA: TData, rowB: TData, columnKey: string) => number
-  >;
+  sortingFns?: Record<string, SortingFn<TData>>;
   getRowId?: (row: TData, index: number) => string | number;
 }
 

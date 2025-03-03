@@ -1,4 +1,4 @@
-import { SortingColumnDef } from './features/SortingManager';
+import { SortingColumnDef } from './features/Sorting/SortingManager';
 
 export type RowDef = unknown | object | any[];
 
@@ -45,6 +45,9 @@ export interface TableOptions<TData extends RowDef> extends TableDef<TData> {
   enableSorting?: boolean;
 }
 
-export interface TableFeature<TData extends RowDef> {
+export interface TableFeature<TData extends RowDef, TState> {
   process(data: TData[], columns: ColumnDef<TData>[]): TData[];
+  setState(state: TState): void;
+  getState(): TState | undefined;
+  resetState(): void;
 }

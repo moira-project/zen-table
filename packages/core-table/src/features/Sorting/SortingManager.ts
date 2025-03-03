@@ -13,7 +13,9 @@ export type SortingColumnDef<TData extends RowDef> = {
   sortingFn?: SortingFn<TData>;
   enableSorting?: boolean;
 };
-export class SortingManager<TData> implements TableFeature<TData> {
+export class SortingManager<TData>
+  implements TableFeature<TData, SortingState>
+{
   private _sortState?: SortingState;
   private sortingFns?: Record<string, SortingFn<TData>>;
 
@@ -21,11 +23,13 @@ export class SortingManager<TData> implements TableFeature<TData> {
     this.sortingFns = sortingFns;
   }
 
-  setSorting(sortState: SortingState) {
+  setState(sortState: SortingState) {
     this._sortState = sortState;
   }
-
-  clearSorting() {
+  getState() {
+    return this._sortState;
+  }
+  resetState() {
     this._sortState = undefined;
   }
 
